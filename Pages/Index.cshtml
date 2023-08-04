@@ -1,0 +1,45 @@
+﻿@page
+@namespace PasswordGeneratorProject.Pages
+@using PasswordGeneratorProject
+
+<h1>Random Password Generator</h1>
+
+<div>
+    <p>
+        <label for="passwordLength">Password Length:</label>
+        <input type="number" id="passwordLength" name="passwordLength" min="8" max="64" value="12" />
+    </p>
+    <p>
+        <label for="includeNumbers">Include Numbers:</label>
+        <input type="checkbox" id="includeNumbers" name="includeNumbers" checked />
+    </p>
+    <p>
+        <label for="includeSpecialChars">Include Special Characters:</label>
+        <input type="checkbox" id="includeSpecialChars" name="includeSpecialChars" checked />
+    </p>
+    <p>
+        <button onclick="generatePassword()">Generate Password</button>
+    </p>
+    <p>
+        <label for="generatedPassword">Generated Password:</label>
+        <input type="text" id="generatedPassword" name="generatedPassword" readonly />
+    </p>
+</div>
+
+<script>
+    function generatePassword() {
+        var passwordLength = document.getElementById("passwordLength").value;
+        var includeNumbers = document.getElementById("includeNumbers").checked;
+        var includeSpecialChars = document.getElementById("includeSpecialChars").checked;
+
+        // AJAX call to the endpoint for password generation
+        fetch(`/PasswordGenerator/GeneratePassword?length=${passwordLength}&includeNumbers=${includeNumbers}&includeSpecialChars=${includeSpecialChars}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("generatedPassword").value = data.password;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
